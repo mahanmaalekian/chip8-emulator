@@ -29,11 +29,9 @@ void Chip8::decode() {
     switch (first_nibble)
     {
     case 0x0:
-        
         break;
     case 0x1:
         pc = nibble_234;
-
     case 0x6:
         variable_registers[second_nibble] = second_byte;
         break;

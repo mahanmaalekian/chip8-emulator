@@ -1,8 +1,7 @@
 #include <iostream>
 #include "chip8.h"
+#include "dispay.h"
 int main() {
-	for (int i{0}; i < 100000; i++){
-		std::cout<<"hello\n";
-	}
+	Display d = Display();	
 	return 0;
 }
