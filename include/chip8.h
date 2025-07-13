@@ -1,6 +1,7 @@
 #ifndef CHIP8_H
 #define CHIP8_H
 #include <cstdint>
+#include "display.h"
 
 class Chip8 {
     public:
@@ -9,7 +10,7 @@ class Chip8 {
         static const int FONT_START_ADDR{0x50};
         static const int FONT_END_ADDR{0x9F};
 
-
+        Display display;
         uint8_t memory[4096];
         uint16_t pc{0x200};
         uint16_t index_register{0};
@@ -36,10 +37,41 @@ class Chip8 {
             0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
             0xF0, 0x80, 0xF0, 0x80, 0x80  // F
         };
+
+        using instruction_parts = struct {
+            uint8_t first_nibble;
+            uint8_t x;
+            uint8_t y;
+            uint8_t n;
+            uint8_t nn;
+            uint16_t nnn;
+        };
+
+        using IN_EXEC = void (Chip8::*) (instruction_parts);
+        static const IN_EXEC execute_modes[0xF];
+
+
         Chip8();
         void init();
         void fetch();
         void decode();
+        /*
+        void execute1(instruction_parts instr_parts);
+        void execute2(instruction_parts instr_parts);
+        void execute3(instruction_parts instr_parts);
+        void execute4(instruction_parts instr_parts);
+        void execute5(instruction_parts instr_parts);
+        void execute6(instruction_parts instr_parts);
+        void execute7(instruction_parts instr_parts);
+        void execute8(instruction_parts instr_parts);
+        void execute9(instruction_parts instr_parts);
+        void executeA(instruction_parts instr_parts);
+        void executeB(instruction_parts instr_parts);
+        void executeC(instruction_parts instr_parts);
+        void executeD(instruction_parts instr_parts);
+        void executeE(instruction_parts instr_parts);
+        void executeF(instruction_parts instr_parts);
+        */
 
 };
 
