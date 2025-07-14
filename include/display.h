@@ -13,7 +13,7 @@ class Display {
 
         SDL_Window* window = nullptr;
         SDL_Renderer* renderer = nullptr;
-        bool display_arr[DISPLAY_WIDTH][DISPLAY_HEIGHT]{false};
+        bool display_arr[DISPLAY_HEIGHT][DISPLAY_WIDTH]{false};
         
     
 

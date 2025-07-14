@@ -52,9 +52,12 @@ class Chip8 {
 
 
         Chip8();
+        int run(int argc, char **argv);
         void init();
+        int load_rom(char* file);
         void fetch();
         void decode();
+        void print_video_buffer();
         /*
         void execute1(instruction_parts instr_parts);
         void execute2(instruction_parts instr_parts);
