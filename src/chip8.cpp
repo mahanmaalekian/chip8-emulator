@@ -232,7 +232,46 @@ void Chip8::execute7(instruction_parts instr_parts){
     variable_registers[instr_parts.x] += instr_parts.nn;
 }
 void Chip8::execute8(instruction_parts instr_parts){
-    variable_registers[instr_parts.x] = variable_registers[instr_parts.y];
+    uint8_t Vx = variable_registers[instr_parts.x];
+    uint8_t Vy = variable_registers[instr_parts.y];
+    switch(instr_parts.n) {
+        case 0x0:
+            variable_registers[instr_parts.x] = Vy;
+            break;
+        case 0x1:
+            variable_registers[instr_parts.x] = Vx | Vy;
+            break;
+        case 0x2:
+            variable_registers[instr_parts.x] = Vx & Vy;
+            break;
+        case 0x3:
+            variable_registers[instr_parts.x] = Vx ^ Vy;
+            break;
+        case 0x4:
+            variable_registers[instr_parts.x] = (Vx + Vy);
+            variable_registers[0xF] = ((Vx + Vy) > 255) ? 1 : 0;
+            break;
+        case 0x5:
+            variable_registers[instr_parts.x] = (Vx - Vy);
+            variable_registers[0xF] = (Vx >= Vy) ? 1 : 0;
+            break;
+        case 0x6:
+            variable_registers[instr_parts.x] = Vy >> 1;
+            variable_registers[0xF] = Vy & 1;
+            break;
+        case 0x7:
+            variable_registers[instr_parts.x] = Vy - Vx;
+            variable_registers[0xF] = (Vx <= Vy) ? 1 : 0;
+            break;
+        case 0xE:
+            variable_registers[instr_parts.x] = Vy << 1;
+            variable_registers[0xF] = Vy << 7;
+            break;
+        default:
+            break;
+
+
+    }
 }
 void Chip8::execute9(instruction_parts instr_parts){}
 void Chip8::executeA(instruction_parts instr_parts){
@@ -241,7 +280,9 @@ void Chip8::executeA(instruction_parts instr_parts){
 void Chip8::executeB(instruction_parts instr_parts){}
 void Chip8::executeC(instruction_parts instr_parts){}
 void Chip8::executeE(instruction_parts instr_parts){}
-void Chip8::executeF(instruction_parts instr_parts){}
+void Chip8::executeF(instruction_parts instr_parts){
+
+}
 
 
 void Chip8::print_debug() const {
