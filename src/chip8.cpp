@@ -89,6 +89,7 @@ void Chip8::decode() {
     };
     switch (instr_parts.first_nibble) {
         case 0x0:
+            execute0(instr_parts);
             break;
         case 0x1:
             execute1(instr_parts);
@@ -181,12 +182,32 @@ void Chip8::print_video_buffer() {
     }
 }
 
+void Chip8::execute0(instruction_parts instr_parts) {
+    switch (instr_parts.n)
+    {
+    case 0x0:
+        for (int i{0}; i < Display::DISPLAY_HEIGHT; ++i){
+            for (int j{0}; j < Display::DISPLAY_WIDTH; ++j) {
+                display.display_arr[i][j] = false;
+            }
+        }       
+        break;
+    case 0xE:
+        sp--; 
+        pc = stack[sp];
+    default:
+        // NO_IMPL
+        break;
+    }
+
+}
+
 void Chip8::execute1(instruction_parts instr_parts){
     pc = instr_parts.nnn;
 }
 void Chip8::execute2(instruction_parts instr_parts){
     stack[sp] =  pc;
-    sp += 1;
+    sp++;
     pc = instr_parts.nnn;
 }
 void Chip8::execute3(instruction_parts instr_parts){

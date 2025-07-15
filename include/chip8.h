@@ -59,6 +59,7 @@ class Chip8 {
         void fetch();
         void decode();
         void print_video_buffer();
+        void execute0(instruction_parts instr_parts);
         void execute1(instruction_parts instr_parts);
         void execute2(instruction_parts instr_parts);
         void execute3(instruction_parts instr_parts);
@@ -78,5 +79,5 @@ class Chip8 {
         void print_debug() const;
 
 };
-
+#define NO_IMPL { std::cerr <<"NOT YET IMPLEMENTED\n"; exit(-5); }
 #endif
