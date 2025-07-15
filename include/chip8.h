@@ -18,7 +18,7 @@ class Chip8 {
         uint8_t sp{0};
         uint8_t delay_timer{0};
         uint8_t sound_timer{0};
-        uint16_t variable_registers[16]{};
+        uint8_t variable_registers[16]{};
         uint16_t curr_instruction{0};
         uint8_t fontset[80] = {
             0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
