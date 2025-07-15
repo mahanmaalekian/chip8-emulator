@@ -14,7 +14,8 @@ class Chip8 {
         uint8_t memory[4096];
         uint16_t pc{0x200};
         uint16_t index_register{0};
-        uint16_t *stack{};
+        uint16_t stack[16]{};
+        uint8_t sp{0};
         uint8_t delay_timer{0};
         uint8_t sound_timer{0};
         uint16_t variable_registers[16]{};
@@ -58,7 +59,6 @@ class Chip8 {
         void fetch();
         void decode();
         void print_video_buffer();
-        /*
         void execute1(instruction_parts instr_parts);
         void execute2(instruction_parts instr_parts);
         void execute3(instruction_parts instr_parts);
@@ -74,7 +74,8 @@ class Chip8 {
         void executeD(instruction_parts instr_parts);
         void executeE(instruction_parts instr_parts);
         void executeF(instruction_parts instr_parts);
-        */
+    private:
+        void print_debug() const;
 
 };
 

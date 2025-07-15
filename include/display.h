@@ -18,7 +18,7 @@ class Display {
     
 
         Display();
-       void draw(int x_coord, int y_coord, Color color); 
+        void draw(); 
 };
 
 

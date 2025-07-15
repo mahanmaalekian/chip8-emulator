@@ -6,8 +6,8 @@
 
 int main(int argc, char **argv) {
 	// Display d = Display();	
-	Chip8 chip = Chip8(); // Chip8 should have argc and argv
-	chip.run(argc, argv);
+	Chip8 chip = Chip8();
+	return chip.run(argc, argv);
 	//timing_timer = 0
 	// isntruction timer = 0 
 	// while (true) {
@@ -15,6 +15,4 @@ int main(int argc, char **argv) {
 		// if 700 Hz has passed, then you can fetch and decode the instruction and reset it to 0 
 		// chip.fetch();
 	// }
-std::this_thread::sleep_for(std::chrono::seconds(5));
-	return 0;
 }

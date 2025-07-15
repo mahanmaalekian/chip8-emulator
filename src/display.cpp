@@ -14,7 +14,7 @@ Display::Display() {
     // SDL_Delay(10000);
 }
 
-void Display::draw(int x_coord, int y_coord, Color color) {
+void Display::draw() {
     for (int y{0}; y < DISPLAY_HEIGHT; ++y){
         for (int x{0}; x < DISPLAY_WIDTH; ++x)
         {
@@ -30,5 +30,7 @@ void Display::draw(int x_coord, int y_coord, Color color) {
         
     }
     SDL_RenderPresent(renderer);
+    //only works if i render all
+
 }
 
