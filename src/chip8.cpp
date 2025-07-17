@@ -281,7 +281,30 @@ void Chip8::executeB(instruction_parts instr_parts){}
 void Chip8::executeC(instruction_parts instr_parts){}
 void Chip8::executeE(instruction_parts instr_parts){}
 void Chip8::executeF(instruction_parts instr_parts){
-
+    switch(instr_parts.nn) {
+        case 0x33: {
+            uint8_t Vx = variable_registers[instr_parts.x];
+            memory[index_register] = Vx / 100;
+            Vx -= memory[index_register] * 100;
+            memory[index_register + 1] = Vx / 10;
+            memory[index_register + 2] = Vx % 10;
+            break;
+        }
+        case 0x55:
+            for (int i{0}; i <= instr_parts.x; ++i) {
+                memory[index_register + i] = variable_registers[i];
+            }
+            break;
+        case 0x65:
+            for (int i{0}; i <= instr_parts.x; ++i) {
+                variable_registers[i] = memory[index_register + i];
+            }
+            break;
+        case 0x1E:
+            index_register += variable_registers[instr_parts.x];
+            break;
+    }
+        
 }
 
 
