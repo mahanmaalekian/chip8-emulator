@@ -5,7 +5,7 @@
 #include <thread>
 
 int main(int argc, char **argv) {
-	// Display d = Display();	
+	// SystemInterface d = SystemInterface();	
 	Chip8 chip = Chip8();
 	return chip.run(argc, argv);
 	//timing_timer = 0

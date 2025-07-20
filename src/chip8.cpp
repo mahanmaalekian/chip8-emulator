@@ -153,8 +153,8 @@ void Chip8::executeD(instruction_parts instr_parts){
         for (int j{0}; j < 8; ++j) {
             uint8_t bit = (sprite_byte >> (7 - j)) & 1;
             if (1 == bit) {
-                int px = (x_coord + j) % Display::DISPLAY_WIDTH;
-                int py = (y_coord + i) % Display::DISPLAY_HEIGHT;
+                int px = (x_coord + j) % SystemInterface::DISPLAY_WIDTH;
+                int py = (y_coord + i) % SystemInterface::DISPLAY_HEIGHT;
                 bool pixel = display.display_arr[py][px];
                 if (pixel) {
                     display.display_arr[py][px] = false;
@@ -169,8 +169,8 @@ void Chip8::executeD(instruction_parts instr_parts){
 }
 
 void Chip8::print_video_buffer() {
-    for (int y = 0; y < Display::DISPLAY_HEIGHT; ++y) {
-        for (int x = 0; x < Display::DISPLAY_WIDTH; ++x) {
+    for (int y = 0; y < SystemInterface::DISPLAY_HEIGHT; ++y) {
+        for (int x = 0; x < SystemInterface::DISPLAY_WIDTH; ++x) {
             uint32_t pixel = display.display_arr[y][x];
             if (pixel == true) {
                 std::cout << "#";  // white pixel
@@ -186,8 +186,8 @@ void Chip8::execute0(instruction_parts instr_parts) {
     switch (instr_parts.n)
     {
     case 0x0:
-        for (int i{0}; i < Display::DISPLAY_HEIGHT; ++i){
-            for (int j{0}; j < Display::DISPLAY_WIDTH; ++j) {
+        for (int i{0}; i < SystemInterface::DISPLAY_HEIGHT; ++i){
+            for (int j{0}; j < SystemInterface::DISPLAY_WIDTH; ++j) {
                 display.display_arr[i][j] = false;
             }
         }       

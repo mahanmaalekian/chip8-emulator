@@ -10,7 +10,7 @@ class Chip8 {
         static const int FONT_START_ADDR{0x50};
         static const int FONT_END_ADDR{0x9F};
 
-        Display display;
+        SystemInterface display;
         uint8_t memory[4096];
         uint16_t pc{0x200};
         uint16_t index_register{0};
