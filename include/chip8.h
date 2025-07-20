@@ -1,6 +1,7 @@
 #ifndef CHIP8_H
 #define CHIP8_H
 #include <cstdint>
+#include <chrono>
 #include "display.h"
 
 class Chip8 {
@@ -38,7 +39,8 @@ class Chip8 {
             0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
             0xF0, 0x80, 0xF0, 0x80, 0x80  // F
         };
-
+        float cycle_delay = 1.5;
+        float timer_delay = 16.67;
         using instruction_parts = struct {
             uint8_t first_nibble;
             uint8_t x;

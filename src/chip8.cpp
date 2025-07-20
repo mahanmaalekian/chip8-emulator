@@ -1,4 +1,5 @@
 #include "chip8.h"
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <chrono>
@@ -37,12 +38,42 @@ int Chip8::run(int argc, char**argv) {
        std::cout << "Cannot load rom file\n"; 
        return -1;
     }
-    while(true) {
-        print_debug();
-        fetch();
-        decode();
-        display.draw();
-        print_video_buffer();
+    bool quit = false;
+    auto start_time_cycle = std::chrono::high_resolution_clock::now();
+
+    auto start_time_timer = std::chrono::high_resolution_clock::now();
+
+
+    while(!quit) {
+		    display.draw_display();
+
+        auto current_time_cycle = std::chrono::high_resolution_clock::now();
+		float elapsed_cycle = std::chrono::duration<float, std::chrono::milliseconds::period>(current_time_cycle - start_time_cycle).count();
+        if (elapsed_cycle > cycle_delay) {
+            display.process_input();
+            // print_debug();
+            fetch();
+            decode();
+            // print_video_buffer();
+            start_time_cycle = current_time_cycle;
+        }
+
+        
+        auto current_time_timer = std::chrono::high_resolution_clock::now();
+        float elapsed_timer = std::chrono::duration<float, std::chrono::milliseconds::period>(current_time_timer - start_time_timer).count();
+
+        if (elapsed_timer > timer_delay) {
+            // update timers
+		    display.draw_display();
+
+            if (delay_timer > 0) delay_timer--;
+            if (sound_timer > 0) sound_timer--;
+            start_time_timer = current_time_timer;
+        }
+        
+        quit = display.process_input();
+
+        
         // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
     return 0;
@@ -143,7 +174,7 @@ void Chip8::decode() {
 void Chip8::executeD(instruction_parts instr_parts){
     int x_coord = variable_registers[instr_parts.x];
     int y_coord = variable_registers[instr_parts.y];
-    std::cout << "x" << x_coord << "y" << y_coord << "\n";
+    // std::cout << "x" << x_coord << "y" << y_coord << "\n";
 
     variable_registers[0xF] = 0;
     int n = instr_parts.n;
@@ -277,11 +308,60 @@ void Chip8::execute9(instruction_parts instr_parts){}
 void Chip8::executeA(instruction_parts instr_parts){
     index_register = instr_parts.nnn;
 }
-void Chip8::executeB(instruction_parts instr_parts){}
-void Chip8::executeC(instruction_parts instr_parts){}
-void Chip8::executeE(instruction_parts instr_parts){}
+void Chip8::executeB(instruction_parts instr_parts){
+    pc = memory[instr_parts.nnn + variable_registers[0]];
+}
+void Chip8::executeC(instruction_parts instr_parts){
+    uint8_t random = rand() % 256;
+    random &= instr_parts.nn;
+    variable_registers[instr_parts.x] = random;
+}
+void Chip8::executeE(instruction_parts instr_parts){
+    for (int i = 0; i <=0xF; i++){
+        std::cout << display.keys[i] << " ";
+    }
+    std::cout<<"\n";
+    switch(instr_parts.nn) {
+        case 0x9E:
+            if (display.keys[variable_registers[instr_parts.x]]) {
+                std::cout << "IT IS PRESSED\n";
+                pc += 2;
+            }
+            break;
+        case 0xA1:
+            if (!display.keys[variable_registers[instr_parts.x]]) {
+                pc += 2;
+            }
+            break;
+    }
+}
 void Chip8::executeF(instruction_parts instr_parts){
     switch(instr_parts.nn) {
+        case 0x07:
+            variable_registers[instr_parts.x] = delay_timer;
+            break;
+        case 0x0A: 
+            for (int i{0}; i <= 0xF; ++i) {
+                if (true == display.keys[i]) {
+                    variable_registers[instr_parts.x] = i;
+                    while (!display.process_input() && true == display.keys[i]);
+                    pc += 2;
+                    break;
+                }
+            }
+            pc -= 2;
+            break;
+        case 0x15:
+            delay_timer = variable_registers[instr_parts.x];
+            break;
+        case 0x18:
+            sound_timer = variable_registers[instr_parts.x];
+            break;
+        case 0x29: {
+            uint8_t character = variable_registers[instr_parts.x] & 0xF;
+            index_register = memory[FONT_START_ADDR + character * 5]; // 5 for character row length
+            break;
+        }
         case 0x33: {
             uint8_t Vx = variable_registers[instr_parts.x];
             memory[index_register] = Vx / 100;
