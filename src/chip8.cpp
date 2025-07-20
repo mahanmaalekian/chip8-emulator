@@ -359,7 +359,7 @@ void Chip8::executeF(instruction_parts instr_parts){
             break;
         case 0x29: {
             uint8_t character = variable_registers[instr_parts.x] & 0xF;
-            index_register = memory[FONT_START_ADDR + character * 5]; // 5 for character row length
+            index_register = FONT_START_ADDR + character * 5; // 5 for character row length
             break;
         }
         case 0x33: {
