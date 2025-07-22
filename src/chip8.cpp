@@ -304,7 +304,11 @@ void Chip8::execute8(instruction_parts instr_parts){
 
     }
 }
-void Chip8::execute9(instruction_parts instr_parts){}
+void Chip8::execute9(instruction_parts instr_parts){
+    if (variable_registers[instr_parts.x] != variable_registers[instr_parts.y]){
+        pc += 2;
+    }
+}
 void Chip8::executeA(instruction_parts instr_parts){
     index_register = instr_parts.nnn;
 }
