@@ -1,11 +1,11 @@
 #include <iostream>
-#include "chip8.h"
-#include "display.h"
+#include "Chip8.h"
+#include "Chip8Interface.h"
 #include <chrono>
 #include <thread>
 
 int main(int argc, char **argv) {
-	// SystemInterface d = SystemInterface();	
+	// Chip8Interface d = Chip8Interface();	
 	Chip8 chip = Chip8();
 	return chip.run(argc, argv);
 	//timing_timer = 0

@@ -1,7 +1,7 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 #include <SDL2/SDL.h>
-class SystemInterface {
+class Chip8Interface {
     public:
         const static uint8_t DISPLAY_WIDTH{64};
         const static uint8_t DISPLAY_HEIGHT{32};
@@ -18,7 +18,7 @@ class SystemInterface {
         
     
 
-        SystemInterface();
+        Chip8Interface();
         void draw_display(); 
         bool process_input();
         void beep();

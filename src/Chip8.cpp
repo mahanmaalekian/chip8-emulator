@@ -1,4 +1,4 @@
-#include "chip8.h"
+#include "Chip8.h"
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -45,7 +45,7 @@ int Chip8::run(int argc, char**argv) {
 
 
     while(!quit) {
-        quit = display.process_input();
+        quit = chip8_interface.process_input();
         auto current_time_cycle = std::chrono::high_resolution_clock::now();
 		float elapsed_cycle = std::chrono::duration<float, std::chrono::milliseconds::period>(current_time_cycle - start_time_cycle).count();
         if (elapsed_cycle > cycle_delay) {
@@ -62,12 +62,12 @@ int Chip8::run(int argc, char**argv) {
 
         if (elapsed_timer > timer_delay) {
             // update timers
-		    display.draw_display();
+		    chip8_interface.draw_display();
 
             if (delay_timer > 0) delay_timer--;
             if (sound_timer > 0) {
                 sound_timer--;
-                display.beep();
+                chip8_interface.beep();
             }
             start_time_timer = current_time_timer;
         }
@@ -181,14 +181,14 @@ void Chip8::executeD(instruction_parts instr_parts){
         for (int j{0}; j < 8; ++j) {
             uint8_t bit = (sprite_byte >> (7 - j)) & 1;
             if (1 == bit) {
-                int px = (x_coord + j) % SystemInterface::DISPLAY_WIDTH;
-                int py = (y_coord + i) % SystemInterface::DISPLAY_HEIGHT;
-                bool pixel = display.display_arr[py][px];
+                int px = (x_coord + j) % Chip8Interface::DISPLAY_WIDTH;
+                int py = (y_coord + i) % Chip8Interface::DISPLAY_HEIGHT;
+                bool pixel = chip8_interface.display_arr[py][px];
                 if (pixel) {
-                    display.display_arr[py][px] = false;
+                    chip8_interface.display_arr[py][px] = false;
                     variable_registers[0xF] = 1;
                 } else {
-                    display.display_arr[py][px] = true;
+                    chip8_interface.display_arr[py][px] = true;
                 }
             }
         }
@@ -197,9 +197,9 @@ void Chip8::executeD(instruction_parts instr_parts){
 }
 
 void Chip8::print_video_buffer() {
-    for (int y = 0; y < SystemInterface::DISPLAY_HEIGHT; ++y) {
-        for (int x = 0; x < SystemInterface::DISPLAY_WIDTH; ++x) {
-            uint32_t pixel = display.display_arr[y][x];
+    for (int y = 0; y < Chip8Interface::DISPLAY_HEIGHT; ++y) {
+        for (int x = 0; x < Chip8Interface::DISPLAY_WIDTH; ++x) {
+            uint32_t pixel = chip8_interface.display_arr[y][x];
             if (pixel == true) {
                 std::cout << "#";  // white pixel
             } else {
@@ -214,9 +214,9 @@ void Chip8::execute0(instruction_parts instr_parts) {
     switch (instr_parts.n)
     {
     case 0x0:
-        for (int i{0}; i < SystemInterface::DISPLAY_HEIGHT; ++i){
-            for (int j{0}; j < SystemInterface::DISPLAY_WIDTH; ++j) {
-                display.display_arr[i][j] = false;
+        for (int i{0}; i < Chip8Interface::DISPLAY_HEIGHT; ++i){
+            for (int j{0}; j < Chip8Interface::DISPLAY_WIDTH; ++j) {
+                chip8_interface.display_arr[i][j] = false;
             }
         }       
         break;
@@ -322,18 +322,18 @@ void Chip8::executeC(instruction_parts instr_parts){
 }
 void Chip8::executeE(instruction_parts instr_parts){
     for (int i = 0; i <=0xF; i++){
-        std::cout << display.keys[i] << " ";
+        std::cout << chip8_interface.keys[i] << " ";
     }
     std::cout<<"\n";
     switch(instr_parts.nn) {
         case 0x9E:
-            if (display.keys[variable_registers[instr_parts.x]]) {
+            if (chip8_interface.keys[variable_registers[instr_parts.x]]) {
                 std::cout << "IT IS PRESSED\n";
                 pc += 2;
             }
             break;
         case 0xA1:
-            if (!display.keys[variable_registers[instr_parts.x]]) {
+            if (!chip8_interface.keys[variable_registers[instr_parts.x]]) {
                 pc += 2;
             }
             break;
@@ -346,9 +346,9 @@ void Chip8::executeF(instruction_parts instr_parts){
             break;
         case 0x0A: 
             for (int i{0}; i <= 0xF; ++i) {
-                if (true == display.keys[i]) {
+                if (true == chip8_interface.keys[i]) {
                     variable_registers[instr_parts.x] = i;
-                    while (!display.process_input() && true == display.keys[i]);
+                    // while (!chip8_interface.process_input() && true == chip8_interface.keys[i]);
                     pc += 2;
                     break;
                 }

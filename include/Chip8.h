@@ -2,7 +2,7 @@
 #define CHIP8_H
 #include <cstdint>
 #include <chrono>
-#include "display.h"
+#include "Chip8Interface.h"
 
 class Chip8 {
     public:
@@ -11,7 +11,7 @@ class Chip8 {
         static const int FONT_START_ADDR{0x50};
         static const int FONT_END_ADDR{0x9F};
 
-        SystemInterface display;
+        Chip8Interface chip8_interface;
         uint8_t memory[4096];
         uint16_t pc{0x200};
         uint16_t index_register{0};
@@ -39,8 +39,8 @@ class Chip8 {
             0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
             0xF0, 0x80, 0xF0, 0x80, 0x80  // F
         };
-        float cycle_delay = 1.5;
-        float timer_delay = 16.67;
+        float cycle_delay = 2;
+        float timer_delay = 2;
         using instruction_parts = struct {
             uint8_t first_nibble;
             uint8_t x;

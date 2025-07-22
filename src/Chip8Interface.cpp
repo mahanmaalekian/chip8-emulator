@@ -1,7 +1,7 @@
-#include "display.h"
+#include "Chip8Interface.h"
 #include <iostream>
 
-SystemInterface::SystemInterface() {
+Chip8Interface::Chip8Interface() {
     SDL_Init(SDL_INIT_VIDEO);
     SDL_CreateWindowAndRenderer(DISPLAY_WIDTH*10, DISPLAY_HEIGHT*10, 0, &window, &renderer);
     SDL_RenderSetLogicalSize(renderer, 64, 32);
@@ -15,7 +15,7 @@ SystemInterface::SystemInterface() {
     // SDL_Delay(10000);
 }
 
-void SystemInterface::draw_display() {
+void Chip8Interface::draw_display() {
     for (int y{0}; y < DISPLAY_HEIGHT; ++y){
         for (int x{0}; x < DISPLAY_WIDTH; ++x)
         {
@@ -35,7 +35,7 @@ void SystemInterface::draw_display() {
 
 }
 
-bool SystemInterface::process_input() {
+bool Chip8Interface::process_input() {
     bool quit = false;
     SDL_Event event{};
 
@@ -152,5 +152,5 @@ bool SystemInterface::process_input() {
     return quit;
 }
 
-void SystemInterface::beep() {
+void Chip8Interface::beep() {
 }

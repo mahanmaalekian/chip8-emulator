@@ -1,4 +1,4 @@
-add_library(chip8 chip8.cpp display.cpp)
+add_library(chip8 Chip8.cpp Chip8Interface.cpp)
 
 target_include_directories(chip8
 	PUBLIC
