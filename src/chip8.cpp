@@ -45,12 +45,10 @@ int Chip8::run(int argc, char**argv) {
 
 
     while(!quit) {
-		    display.draw_display();
-
+        quit = display.process_input();
         auto current_time_cycle = std::chrono::high_resolution_clock::now();
 		float elapsed_cycle = std::chrono::duration<float, std::chrono::milliseconds::period>(current_time_cycle - start_time_cycle).count();
         if (elapsed_cycle > cycle_delay) {
-            display.process_input();
             // print_debug();
             fetch();
             decode();
@@ -67,14 +65,13 @@ int Chip8::run(int argc, char**argv) {
 		    display.draw_display();
 
             if (delay_timer > 0) delay_timer--;
-            if (sound_timer > 0) sound_timer--;
+            if (sound_timer > 0) {
+                sound_timer--;
+                display.beep();
+            }
             start_time_timer = current_time_timer;
         }
         
-        quit = display.process_input();
-
-        
-        // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
     return 0;
 }
@@ -111,12 +108,12 @@ void Chip8::fetch() {
 void Chip8::decode() {
     // define macro for this
     instruction_parts instr_parts = {
-        static_cast<uint8_t>(curr_instruction >> 12),
-        static_cast<uint8_t>((curr_instruction >> 8) & 0xF),
-        static_cast<uint8_t>((curr_instruction >> 4) & 0xF),
-        static_cast<uint8_t>((curr_instruction) & 0xF),
-        static_cast<uint8_t>(curr_instruction & 0xFF),
-        static_cast<uint16_t>(curr_instruction & 0xFFF)
+        .first_nibble = static_cast<uint8_t>(curr_instruction >> 12),
+        .x = static_cast<uint8_t>((curr_instruction >> 8) & 0xF),
+        .y = static_cast<uint8_t>((curr_instruction >> 4) & 0xF),
+        .n = static_cast<uint8_t>((curr_instruction) & 0xF),
+        .nn = static_cast<uint8_t>(curr_instruction & 0xFF),
+        .nnn = static_cast<uint16_t>(curr_instruction & 0xFFF)
     };
     switch (instr_parts.first_nibble) {
         case 0x0:
@@ -226,8 +223,9 @@ void Chip8::execute0(instruction_parts instr_parts) {
     case 0xE:
         sp--; 
         pc = stack[sp];
+        break;
     default:
-        // NO_IMPL
+        NO_IMPL
         break;
     }
 
@@ -253,7 +251,7 @@ void Chip8::execute4(instruction_parts instr_parts){
 }
 void Chip8::execute5(instruction_parts instr_parts){
     if (variable_registers[instr_parts.x] == variable_registers[instr_parts.y]) {
-        pc +=2;
+        pc += 2;
     }
 }
 void Chip8::execute6(instruction_parts instr_parts){
@@ -271,15 +269,17 @@ void Chip8::execute8(instruction_parts instr_parts){
             break;
         case 0x1:
             variable_registers[instr_parts.x] = Vx | Vy;
+            variable_registers[0xF] = 0;
             break;
         case 0x2:
             variable_registers[instr_parts.x] = Vx & Vy;
+            variable_registers[0xF] = 0;
             break;
         case 0x3:
             variable_registers[instr_parts.x] = Vx ^ Vy;
             break;
         case 0x4:
-            variable_registers[instr_parts.x] = (Vx + Vy);
+            variable_registers[instr_parts.x] = (Vx + Vy) & 0xFFu;
             variable_registers[0xF] = ((Vx + Vy) > 255) ? 1 : 0;
             break;
         case 0x5:
@@ -287,16 +287,16 @@ void Chip8::execute8(instruction_parts instr_parts){
             variable_registers[0xF] = (Vx >= Vy) ? 1 : 0;
             break;
         case 0x6:
-            variable_registers[instr_parts.x] = Vy >> 1;
-            variable_registers[0xF] = Vy & 1;
+            variable_registers[instr_parts.x] >>= 1;
+            variable_registers[0xF] = Vx & 1;
             break;
         case 0x7:
             variable_registers[instr_parts.x] = Vy - Vx;
             variable_registers[0xF] = (Vx <= Vy) ? 1 : 0;
             break;
         case 0xE:
-            variable_registers[instr_parts.x] = Vy << 1;
-            variable_registers[0xF] = Vy << 7;
+            variable_registers[instr_parts.x] <<= 1;
+            variable_registers[0xF] = (Vx >> 7) & 1;
             break;
         default:
             break;
@@ -309,7 +309,7 @@ void Chip8::executeA(instruction_parts instr_parts){
     index_register = instr_parts.nnn;
 }
 void Chip8::executeB(instruction_parts instr_parts){
-    pc = memory[instr_parts.nnn + variable_registers[0]];
+    pc = instr_parts.nnn + variable_registers[0];
 }
 void Chip8::executeC(instruction_parts instr_parts){
     uint8_t random = rand() % 256;
@@ -358,7 +358,7 @@ void Chip8::executeF(instruction_parts instr_parts){
             sound_timer = variable_registers[instr_parts.x];
             break;
         case 0x29: {
-            uint8_t character = variable_registers[instr_parts.x] & 0xF;
+            uint8_t character = variable_registers[instr_parts.x];
             index_register = FONT_START_ADDR + character * 5; // 5 for character row length
             break;
         }

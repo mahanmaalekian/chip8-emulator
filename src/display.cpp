@@ -151,3 +151,6 @@ bool SystemInterface::process_input() {
     }
     return quit;
 }
+
+void SystemInterface::beep() {
+}

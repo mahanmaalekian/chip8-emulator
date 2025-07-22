@@ -21,6 +21,7 @@ class SystemInterface {
         SystemInterface();
         void draw_display(); 
         bool process_input();
+        void beep();
 };
 
 
