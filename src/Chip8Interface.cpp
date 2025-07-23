@@ -7,12 +7,6 @@ Chip8Interface::Chip8Interface() {
     SDL_RenderSetLogicalSize(renderer, 64, 32);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-
-    // SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    // SDL_RenderDrawPoint(renderer, DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2);
-
-    // SDL_RenderPresent(renderer);
-    // SDL_Delay(10000);
 }
 
 void Chip8Interface::draw_display() {
@@ -28,7 +22,6 @@ void Chip8Interface::draw_display() {
             }
             SDL_RenderDrawPoint(renderer, x, y);
         }
-        
     }
     SDL_RenderPresent(renderer);
     //only works if i render all
@@ -36,7 +29,7 @@ void Chip8Interface::draw_display() {
 }
 
 bool Chip8Interface::process_input() {
-    bool quit = false;
+    bool quit{false};
     SDL_Event event{};
 
     while (SDL_PollEvent(&event))  {

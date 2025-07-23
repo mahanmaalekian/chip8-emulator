@@ -1,16 +1,22 @@
 #ifndef CHIP8_H
 #define CHIP8_H
 #include <cstdint>
-#include <chrono>
 #include "Chip8Interface.h"
 
 class Chip8 {
     public:
-        static const int MEMORY_SIZE = 4096;
-        static const int REGISTER_COUNT = 16;
+        static const int MEMORY_SIZE {4096};
+        static const int REGISTER_COUNT {16};
         static const int FONT_START_ADDR{0x50};
         static const int FONT_END_ADDR{0x9F};
-
+        using instruction_parts = struct {
+            uint8_t first_nibble;
+            uint8_t x;
+            uint8_t y;
+            uint8_t n;
+            uint8_t nn;
+            uint16_t nnn;
+        };
         Chip8Interface chip8_interface;
         uint8_t memory[4096];
         uint16_t pc{0x200};
@@ -21,7 +27,7 @@ class Chip8 {
         uint8_t sound_timer{0};
         uint8_t variable_registers[16]{};
         uint16_t curr_instruction{0};
-        uint8_t fontset[80] = {
+        uint8_t fontset[80] {
             0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
             0x20, 0x60, 0x20, 0x20, 0x70, // 1
             0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
@@ -39,16 +45,9 @@ class Chip8 {
             0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
             0xF0, 0x80, 0xF0, 0x80, 0x80  // F
         };
-        float cycle_delay = 2;
-        float timer_delay = 2;
-        using instruction_parts = struct {
-            uint8_t first_nibble;
-            uint8_t x;
-            uint8_t y;
-            uint8_t n;
-            uint8_t nn;
-            uint16_t nnn;
-        };
+        float cycle_delay {2};
+        float timer_delay {2};
+
 
         using IN_EXEC = void (Chip8::*) (instruction_parts);
         static const IN_EXEC execute_modes[0xF];
@@ -81,5 +80,5 @@ class Chip8 {
         void print_debug() const;
 
 };
-#define NO_IMPL { std::cerr <<"NOT YET IMPLEMENTED\n"; exit(-5); }
+#define NO_IMPL { std::cerr <<"NOT YET IMPLEMENTED\n"; exit(-5); }#define NO_IMPL { std::cerr <<"NOT YET IMPLEMENTED\n"; exit(-2); }
 #endif
