@@ -80,5 +80,5 @@ class Chip8 {
         void print_debug() const;
 
 };
-#define NO_IMPL { std::cerr <<"NOT YET IMPLEMENTED\n"; exit(-5); }#define NO_IMPL { std::cerr <<"NOT YET IMPLEMENTED\n"; exit(-2); }
+#define NO_IMPL { std::cerr <<"NOT YET IMPLEMENTED\n"; exit(-2); }
 #endif
