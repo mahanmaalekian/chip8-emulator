@@ -1,11 +1,12 @@
 # Chip8 Emulator
 
-A Chip8 emulator written in C++ with the SDL library
-Although I've called this project a Chip8 emulator, the Chip8 isn't really a peice of hardware, but rather an interpreted programming language/virtual machine/intstruction set architecture created by RCA engineer Joe Weisbecker as a way to make programs and games for his computer. Therefore, it would make more sesense to call it a *Chip8 Interpreter*.
+A Chip8 emulator written in C++ using the SDL library.
 
-For info on the specifications and instructions of the Chip8, the following site contains some good documentation http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#1.0
+Although this project is called a Chip8 emulator, the Chip8 is not actually a piece of hardware, but rather an interpreted programming language, virtual machine, and instruction set architecture created by RCA engineer Joe Weisbecker as a way to make programs and games for his computer. Therefore, it might be more accurate to call this project a *Chip8 interpreter*.
 
-Inside the `rom` folder of the directory, you can find some test ROMs that test out the functionality of the emulator along with some games you can run on the Chip8. Whenever you run the Chip8, you can choose which ROM file you want to load up.
+For information on the specifications and instructions of the Chip8, see the documentation [here](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#1.0).
+
+Inside the `rom` folder of this directory, you can find some test ROMs that verify the functionality of the emulator, along with some game ROMs you can run. When you run the Chip8, you can choose which ROM file to load.
 
 
 ## Running the project
@@ -23,7 +24,7 @@ Inside the `rom` folder of the directory, you can find some test ROMs that test 
 
 ### Windows
 
-For Windows, use WSL and follow the steps above
+For Windows, I highly recommend you use WSL and follow the steps above
 
 ### MacOS
 
