@@ -14,7 +14,7 @@ void Chip8Interface::draw_display() {
         for (int x{0}; x < DISPLAY_WIDTH; ++x)
         {
             bool pixel = display_arr[y][x];
-            if (pixel ) {
+            if (pixel) {
                 SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
             }
             else {
@@ -24,8 +24,6 @@ void Chip8Interface::draw_display() {
         }
     }
     SDL_RenderPresent(renderer);
-    //only works if i render all
-
 }
 
 bool Chip8Interface::process_input() {
@@ -89,7 +87,6 @@ bool Chip8Interface::process_input() {
             }
         }
         else if (event.type == SDL_KEYUP) {
-            std::cout << "key up\n\n\n\n\n\n";
             switch(event.key.keysym.sym) {
                 case SDLK_x:
                     keys[0] = false;
@@ -145,5 +142,4 @@ bool Chip8Interface::process_input() {
     return quit;
 }
 
-void Chip8Interface::beep() {
-}
+void Chip8Interface::beep() {}

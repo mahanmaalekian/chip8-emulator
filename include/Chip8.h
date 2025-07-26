@@ -49,17 +49,12 @@ class Chip8 {
         float timer_delay {2};
 
 
-        using IN_EXEC = void (Chip8::*) (instruction_parts);
-        static const IN_EXEC execute_modes[0xF];
-
-
         Chip8();
         int run(int argc, char **argv);
         void init();
         int load_rom(char* file);
         void fetch();
         void decode();
-        void print_video_buffer();
         void execute0(instruction_parts instr_parts);
         void execute1(instruction_parts instr_parts);
         void execute2(instruction_parts instr_parts);
@@ -78,6 +73,7 @@ class Chip8 {
         void executeF(instruction_parts instr_parts);
     private:
         void print_debug() const;
+        void print_video_buffer();
 
 };
 #define NO_IMPL { std::cerr <<"NOT YET IMPLEMENTED\n"; exit(-2); }

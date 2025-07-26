@@ -5,25 +5,6 @@
 #include <iomanip>
 #include <iostream>
 #include <thread>
-/*
-const Chip8::IN_EXEC Chip8::execute_modes[0xF] = {
-   &Chip8::execute1,
-   &Chip8::execute2,
-   &Chip8::execute3,
-   &Chip8::execute4,
-   &Chip8::execute5,
-   &Chip8::execute6,
-   &Chip8::execute7,
-   &Chip8::execute8,
-   &Chip8::execute9,
-   &Chip8::executeA,
-   &Chip8::executeB,
-   &Chip8::executeC,
-   &Chip8::executeD,
-   &Chip8::executeE,
-   &Chip8::executeF,
-};
-*/
 
 Chip8::Chip8() {
   for (int i{FONT_START_ADDR}; i <= FONT_END_ADDR; i++) {
@@ -53,10 +34,8 @@ int Chip8::run(int argc, char **argv) {
             current_time_cycle - start_time_cycle)
             .count();
     if (elapsed_cycle > cycle_delay) {
-      // print_debug();
       fetch();
       decode();
-      // print_video_buffer();
       start_time_cycle = current_time_cycle;
     }
 
@@ -67,7 +46,6 @@ int Chip8::run(int argc, char **argv) {
             .count();
 
     if (elapsed_timer > timer_delay) {
-      // update timers
       chip8_interface.draw_display();
 
       if (delay_timer > 0)
@@ -109,7 +87,6 @@ void Chip8::fetch() {
 }
 
 void Chip8::decode() {
-  // define macro for this
   instruction_parts instr_parts = {
       .first_nibble = static_cast<uint8_t>(curr_instruction >> 12),
       .x = static_cast<uint8_t>((curr_instruction >> 8) & 0xF),
@@ -167,20 +144,6 @@ void Chip8::decode() {
   case 0xF:
     executeF(instr_parts);
     break;
-  }
-}
-
-void Chip8::print_video_buffer() {
-  for (int y = 0; y < Chip8Interface::DISPLAY_HEIGHT; ++y) {
-    for (int x = 0; x < Chip8Interface::DISPLAY_WIDTH; ++x) {
-      uint32_t pixel = chip8_interface.display_arr[y][x];
-      if (pixel == true) {
-        std::cout << "#"; // white pixel
-      } else {
-        std::cout << " "; // black pixel
-      }
-    }
-    std::cout << "\n";
   }
 }
 
@@ -355,8 +318,7 @@ void Chip8::executeF(instruction_parts instr_parts) {
     for (int i{0}; i <= 0xF; ++i) {
       if (true == chip8_interface.keys[i]) {
         variable_registers[instr_parts.x] = i;
-        // while (!chip8_interface.process_input() && true ==
-        // chip8_interface.keys[i]);
+        // while (!chip8_interface.process_input() && true == chip8_interface.keys[i]);
         is_pressed = true;
         break;
       }
@@ -398,6 +360,20 @@ void Chip8::executeF(instruction_parts instr_parts) {
   case 0x1E:
     index_register += variable_registers[instr_parts.x];
     break;
+  }
+}
+
+void Chip8::print_video_buffer() {
+  for (int y = 0; y < Chip8Interface::DISPLAY_HEIGHT; ++y) {
+    for (int x = 0; x < Chip8Interface::DISPLAY_WIDTH; ++x) {
+      uint32_t pixel = chip8_interface.display_arr[y][x];
+      if (pixel == true) {
+        std::cout << "#"; // white pixel
+      } else {
+        std::cout << " "; // black pixel
+      }
+    }
+    std::cout << "\n";
   }
 }
 
