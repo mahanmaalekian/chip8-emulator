@@ -1,5 +1,4 @@
 #include "Chip8Interface.h"
-#include <iostream>
 
 Chip8Interface::Chip8Interface() {
     SDL_Init(SDL_INIT_VIDEO);

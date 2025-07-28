@@ -4,7 +4,6 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <thread>
 
 Chip8::Chip8() {
   for (int i{FONT_START_ADDR}; i <= FONT_END_ADDR; i++) {
