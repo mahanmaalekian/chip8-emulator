@@ -16,11 +16,11 @@ Inside the `rom` folder of this directory, you can find some test ROMs that veri
 - Install a C++ compiler: `sudo apt install build-essential`
 - Install CMake: `sudo apt install cmake`
 - Install SDL: `sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev`
-- Create the build file in the project's top level directory: `mkdir build`
+- Create the build folder in the project's top level directory: `mkdir build`
 - cd into the build directory: `cd build`
 - run CMake: `cmake ..`
 - compile and link the project: `make`
-- run the executable with a ROM file of your choice: `./chip8-emulator ../roms/<rom-file>`
+- run the executable with a ROM file of your choice: `./chip8-emulator ../rom/<rom-file>`
 
 ### Windows
 
@@ -31,10 +31,10 @@ For Windows, I highly recommend you use WSL and follow the steps above
 - Install a C++ compiler: `xcode-select --install`
 - Install CMake: `brew install cmake`
 - Install SDL: `brew install sdl2 sdl2_image sdl2_mixer sdl2_ttf`
-- Create the build file in the project's top level directory: `mkdir build`
+- Create the build folder in the project's top level directory: `mkdir build`
 - cd into the build directory: `cd build`
 - run CMake: `cmake ..`
 - compile and link the project: `make`
-- run the executable with a ROM file of your choice: `./chip8-emulator ../roms/<rom-file>`
+- run the executable with a ROM file of your choice: `./chip8-emulator ../rom/<rom-file>`
 
 
